@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+  <!-- <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-auth.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script>
+   -->
+  
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  <title>Welcome</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scrip.js"></script>
+</head>
+
+
+<body>
+
+  <div class="container">
+    <br>
+    <br>
+    <br>
+
+
+
+
+    <div class="shadow-lg p-5 mb-5 rounded" id="main">
+      <div id="tab-btn">
+        <a href="#" class="login active">
+          <h2>Login</h2>
+        </a>
+        <a href="#" class="register">
+          <h2>Sign Up</h2>
+        </a>
+      </div>
+      <center>
+
+      </center>
+      <!-- <hr class="line"> -->
+      <br>
+      <div class="content">
+        <form action="#" method="post" id="login-box">
+          <div class="form-group">
+
+            <input type="text" class="form-control form-control-lg" name="username"  placeholder="Username"
+              aria-describedby="helpId" required autofocus><br>
+            <input type="password" class="form-control form-control-lg" name="password"  placeholder="Password"
+              aria-describedby="helpId" required><br>
+            <a href="#" id="forgot">Forgot Password</a> <br>
+            <button type="submit" name="submit" class="btn btn-primary" id="sub-btn" onclick="login()">Login</button>
+          </div>
+
+
+        </form>
+      </div>
+
+      <div class="other">
+        <form action="#" method="post" id="reg-box">
+          <div class="form-group">
+            <input type="text" id="fullname" class="form-control form-control-lg" placeholder="Enter Fullname"
+              class="inp" required autofocus><br>
+            <input type="text" id="user" class="form-control form-control-lg" placeholder="Enter Username" class="inp"
+              required><br>
+            <input type="email" id="email" class="form-control form-control-lg" name="email" placeholder="Enter Email"
+              class="inp" required><br>
+            <input type="password" id="pass" class="form-control form-control-lg" name="pass"
+              placeholder="Enter Password" class="inp" required><br>
+            <button type="submit" name="submit" class="btn btn-primary" id="sub-btn"onclick="regis()">Submit</button><br>
+       
+          </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  <br>
+  <br>
+
+
+
+
+  <!-- <script>
+  firebase.auth().onAuthStateChanged(function(user) {
+if (user) {
+  // User is signed in.
+  
+  // Sent user to home.html
+  window.location.href ='home.html';
+} else {
+  // User is signed out.
+  // Sent user to login.html
+  window.location.href ='login.html';
+}
+});
+</script> -->
+
+
+
+
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <!-- <script src="/__/firebase/6.1.0/firebase-app.js"></script> -->
+
+  <!-- Add Firebase products that you want to use -->
+  <!-- <script src="/__/firebase/6.1.0/firebase-auth.js"></script>
+  <script src="/__/firebase/6.1.0/firebase-firestore.js"></script> -->
+
+
+</body>
+
+
+</html>

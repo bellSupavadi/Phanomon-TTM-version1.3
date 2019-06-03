@@ -1,0 +1,110 @@
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  body{
+      background-image: linear-gradient(to right, #3584A7 51%, #30D2BE 100%);
+   
+      font-family: 'Source Serif Pro', serif;
+      font-size: 25px;
+  }
+    .TableLine {
+      border-top-style: none;
+      border-right-style: none;   
+      border-bottom-style: none;
+      
+      border-left-style: solid;   
+      border-left-width: 5px;
+      border-left-color: Tomato;
+         }
+  
+        .input {
+        
+         
+          padding: 16px 32px;
+        
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+        .shadow-lg{
+         background-color:white;
+           
+        }
+        hr.line {
+          border: 1px solid red;
+        }
+      
+      #tab-btn{
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        direction: flex;
+        width: 100%;
+        justify-content: center;
+      }
+      .login,.register{
+        text-decoration: non;
+        display: block;
+        width: 100%;
+        background-color: darkcyan;
+        text-align: center;
+        color:white;
+        font-size: 25px;
+        padding: 10px;
+      }
+    .active{
+      background-color: white;
+      color:black;
+    }
+    .content,.other{
+      width: 100%;
+     
+    }
+    .other{
+      display: none;
+    }
+    .inp{
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 25px;
+      border: 2px solid #888;
+      background-color: #fff;
+      color: #666;
+    }
+    .inp:focus{
+      outline: none;
+      border: 2px solid #555;
+     
+    }
+    #sub-btn{
+      width: 100%;
+      padding: 12px;
+      border:none;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: crimson;
+      color: aliceblue;
+      cursor: pointer;
+      
+    }
+    #sub-btn:focus{
+      outline:none;
+    }
+    #sub-btn:active{
+      border: none;
+      margin-top: 5px;
+    }
+    #forgot{
+      font-size: 20px;
+      color: #444;
+      display: block;
+    }
+    
+  
+  
+  
+    
