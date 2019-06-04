@@ -7,12 +7,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
-  <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
-  <!-- <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-auth.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script> -->
-  
-  
+  <!-- <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-auth.js"></script> 
+  <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script> 
+
   
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -29,12 +28,12 @@
 
   <title>Welcome</title>
   <link rel="stylesheet" href="style.css">
-  <script src="scrip.js"></script>
+
 </head>
 
 
 <body>
-
+ <script src="scrip.js"></script>
   <div class="container">
     <br>
     <br>
@@ -58,15 +57,15 @@
       <!-- <hr class="line"> -->
       <br>
       <div class="content">
-        <form action="#" method="post" id="login-box">
+        <form id="login-box">
           <div class="form-group">
 
-            <input type="text" class="form-control form-control-lg" name="username"  placeholder="Username"
+            <input type="email" class="form-control form-control-lg" id="username" name="username"  placeholder="Username"
               aria-describedby="helpId" required autofocus><br>
-            <input type="password" class="form-control form-control-lg" name="password"  placeholder="Password"
+            <input type="password" class="form-control form-control-lg" id="password" name="password"  placeholder="Password"
               aria-describedby="helpId" required><br>
             <a href="#" id="forgot">Forgot Password</a> <br>
-            <button type="submit" name="submit" class="btn btn-primary" id="sub-btn" onclick="login()">Login</button>
+            <button type="submit" name="submit" class="btn btn-primary" id="login-btn" onclick="login()" >Login</button> <!-- เราเปลี่ยน id ให้ปุ่ม เพราะก่อนหน้านี้มันซํ้ากัน -->
           </div>
 
 
@@ -74,7 +73,7 @@
       </div>
 
       <div class="other">
-        <form action="#" method="post" id="reg-box">
+        <form id="reg-box" >
           <div class="form-group">
             <input type="text" id="fullname" class="form-control form-control-lg" placeholder="Enter Fullname"
               class="inp" required autofocus><br>
@@ -84,7 +83,7 @@
               class="inp" required><br>
             <input type="password" id="pass" class="form-control form-control-lg" name="pass"
               placeholder="Enter Password" class="inp" required><br>
-            <button type="submit" name="submit" class="btn btn-primary" id="sub-btn"onclick="regis()">Submit</button><br>
+            <button type="submit" name="submit" class="btn btn-primary" id="regis-btn" onclick="regis()">Submit</button><br>
        
           </form>
       </div>
@@ -127,7 +126,6 @@ if (user) {
   <!-- Add Firebase products that you want to use -->
   <!-- <script src="/__/firebase/6.1.0/firebase-auth.js"></script>
   <script src="/__/firebase/6.1.0/firebase-firestore.js"></script> -->
-
 
 </body>
 

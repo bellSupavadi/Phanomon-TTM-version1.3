@@ -27,11 +27,11 @@ $(document).ready(function(){
 //  }
 
       // Initialize Cloud Firestore through Firebase
-      var db = firebase.firestore();
+   /*   var db = firebase.firestore();
       // Disable deprecated features
       db.settings({
-          timestampsInSnapshots: true
-      });
+          timestampsInSnapshots: false
+      }); */
 
       function regis(){
   
@@ -40,42 +40,74 @@ $(document).ready(function(){
         var email = document.getElementById('email').value;
         var pass = document.getElementById('pass').value;
         
-        firebase.auth().createUserWithEmailAndPassword(usern, pass).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          ons.notification.alert(error.code+':'+error.message);
-        });
-        };
+       const register = firebase.auth().createUserWithEmailAndPassword(email, pass).then(function(user){
+          alert("userRegis:"+user);
         
-        
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-          //  window.location.href='hom e.html'
-            // ...
-            ons.notification.alert('Regis');
-          } 
-        });
-        
-        
-        function login() {
-          var username = document.getElementById('username').value;
-          var password = document.getElementById('password').value;
-          firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
+        }).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log(error.code+':'+error.message);
-          ons.notification.alert('login failed');
+        //  ons.notification.alert(error.code+':'+error.message);
+        });
+        }
+
+       function initAuth(){   // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
+
+          firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              console.log("signIN!");
+              alert("signIN!");
+              // User is signed in.
+            //  window.location.href='hom e.html'
+            }else{
+              console.log("null Login"); 
+              alert("null Login!");
+            }
+          }); 
+       }
+
+
+        function logout(){
+
+        firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          console.log('User Logged Out!');
+        }).catch(function(error) {
+          // An error happened.
+          console.log(error);
+        });
+        
+      }
+
+        
+        function login() {
           
-          // ...
+          var username = document.getElementById('username').value;
+          var password = document.getElementById('password').value;
+          alert("username:"+username)
+          alert("password:"+password)
+          firebase.auth().signInWithEmailAndPassword(username, password).then(function(data){
+
+            alert("sign in success");
+            initAuth();
+
+
+          }).catch(function(error) {
+          // Handle Errors here.
+          alert("test auth");
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode != 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+            
+          }
+         
         });
-        };
-         firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-           window.location.href='home.html'
-            // ...
-          } 
-        });
+      
+        }
+    
+  
+  
