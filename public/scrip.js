@@ -27,9 +27,9 @@ firebase.initializeApp(config);
 //  }
 
 // Initialize Cloud Firestore through Firebase
-/*   var db = firebase.firestore();
+   var db = firebase.firestore();
    // Disable deprecated features
-   db.settings({
+ /*  db.settings({
        timestampsInSnapshots: false
    }); */
 
@@ -42,7 +42,19 @@ function regis() {
 
   const register = firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
     alert("userRegis:" + user);
-
+    db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
+      fullname: fullname,
+      username: usern,
+      email: email,
+      password: pass
+  })
+  .then(function(docRef) {
+      console.log("Document written with ID: ", docRef.id);
+  })
+  .catch(function(error) {
+      console.error("Error adding document: ", error);
+  });
+    window.location.href = 'index.html'
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -52,8 +64,8 @@ function regis() {
   });
 }
 
- function initAuth() {   // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
-
+    // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
+function initAuth(){
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("signIN!");
@@ -66,7 +78,7 @@ function regis() {
      else {
       console.log("null Login");
       alert("null Login!");
-     // window.location.href = 'index.html'
+      window.location.href = 'index.html'
     }
   });
 }
@@ -77,63 +89,86 @@ function regis() {
   firebase.auth().signOut().then(function () {
     // Sign-out successful.
     console.log('User Logged Out!');
+   // window.location.href = 'index.html'
+    initAuth();
   }).catch(function (error) {
     // An error happened.
     console.log(error);
   });
   
-//  initAuth();
+  
 }
-async function login() { 
+function login() { 
 
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
   alert("username:" + username)
   alert("password:" + password)
-   await firebase.auth().signInWithEmailAndPassword(username, password).then(async function (data) {
+  db.collection("user").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+       console.log(`${doc.id} => ${doc.data().username}`);
+       if(doc.data().username == username && doc.data().password == password ){
+         console.log("login success")
+         checkLogin(doc.data().email,doc.data().password);
+       }
+       else{
 
-    await alert("data:"+data);
-    await alert("sign in success");
-   //initAuth();
-
-
-  }).catch(function (error) {
-    // Handle Errors here.
-    alert("test auth");
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    if (errorCode != 'auth/wrong-password') {
-      alert('Wrong password.');
-    } else {
-      alert(errorMessage);
-
-    }
-
+       }
+        
+    });
   });
-  
+
 };
 
+function checkLogin(email,password){
+  firebase.auth().signInWithEmailAndPassword(email,password).then(function (data) {
 
+    
+    alert("sign in success");
+    initAuth();
+
+
+ }).catch(function (error) {
+   // Handle Errors here.
+   alert("test auth");
+   var errorCode = error.code;
+   var errorMessage = error.message;
+   if (errorCode != 'auth/wrong-password') {
+     alert('Wrong password.');
+   } else {
+     alert(errorMessage);
+
+   }
+
+ });
+}
+// window.onload = function(e){ 
+//   initAuth();
+// }
 
 //getData() // อันนี้เราทดลองเรียกฟังก์ชั่นข้างล่างเฉยๆ
-
 function getData() { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง
 
   let solaryear = document.getElementById("year").value;
   let solarmonth = document.getElementById("month").value;
   let solarday = document.getElementById("day").value;
+  getAPI(solaryear,solarmonth,solarday)
+  getAPI(solaryear,solarmonth-9,solarday)
+}
+
+
+function getAPI(solaryear,solarmonth,solarday) { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง 
   
   axios.get('https://us-central1-phanomonttm.cloudfunctions.net/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
       let objectMoon = response.data.data
 
       calculator(objectMoon);
+      
     })
     .catch(function (error) {
       console.log(error)
     });
-
-
 }
 
 function calculator(objectMoon){
