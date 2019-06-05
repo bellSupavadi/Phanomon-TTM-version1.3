@@ -52,23 +52,27 @@ function regis() {
   });
 }
 
-function initAuth() {   // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
+ function initAuth() {   // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
 
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("signIN!");
       alert("signIN!");
-      // User is signed in.
-      //  window.location.href='hom e.html'
-    } else {
+      
+          window.location.href = 'home.html'
+          // ...
+        }
+  
+     else {
       console.log("null Login");
       alert("null Login!");
+     // window.location.href = 'index.html'
     }
   });
 }
 
-
-function logout() {
+//logout();
+ function logout() {
 
   firebase.auth().signOut().then(function () {
     // Sign-out successful.
@@ -77,26 +81,20 @@ function logout() {
     // An error happened.
     console.log(error);
   });
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      // User is signed in.
-      window.location.href = 'index.html'
-      // ...
-    }
-  });
+  
+//  initAuth();
 }
-
-
-function login() {
+async function login() { 
 
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
   alert("username:" + username)
   alert("password:" + password)
-  firebase.auth().signInWithEmailAndPassword(username, password).then(function (data) {
+   await firebase.auth().signInWithEmailAndPassword(username, password).then(async function (data) {
 
-    alert("sign in success");
-    initAuth();
+    await alert("data:"+data);
+    await alert("sign in success");
+   //initAuth();
 
 
   }).catch(function (error) {
@@ -112,13 +110,7 @@ function login() {
     }
 
   });
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      // User is signed in.
-      window.location.href = 'home.html'
-      // ...
-    }
-  });
+  
 };
 
 
@@ -127,13 +119,14 @@ function login() {
 
 function getData() { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง
 
-  let solaryear = '2400'  // หาวิธีเอาค่ามาใส่เองดู  อันนี้เป็นตัวอย่างแบบใส่แบบเรากำหนดเอง
-  let solarmonth = '1'
-  let solarday = '11'
-
+  let solaryear = document.getElementById("year").value;
+  let solarmonth = document.getElementById("month").value;
+  let solarday = document.getElementById("day").value;
+  
   axios.get('https://us-central1-phanomonttm.cloudfunctions.net/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
       let objectMoon = response.data.data
+
       calculator(objectMoon);
     })
     .catch(function (error) {
