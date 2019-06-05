@@ -142,6 +142,12 @@ function checkLogin(email,password){
 
  });
 }
+function forgot(){
+const email = document.querySelector('#forgotPasswordEmail').value;
+firebase.auth().sendPasswordResetEmail(email)
+  .then(function() {
+	alert('Reset link has been sent to provided email address');
+  });}
 // window.onload = function(e){ 
 //   initAuth();
 // }
