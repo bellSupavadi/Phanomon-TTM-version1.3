@@ -192,7 +192,7 @@ function getData() { // << สร้างฟังก์ชั่นขึ้�
   let solarmonth = document.getElementById("month").value;
   let solarday = document.getElementById("day").value;
    getAPI(solaryear,solarmonth,solarday)
-  getAPI(solaryear,solarmonth-9,solarday)
+  // getAPI(solaryear,solarmonth-9,solarday)
   
   
 }
