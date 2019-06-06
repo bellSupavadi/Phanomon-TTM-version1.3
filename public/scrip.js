@@ -14,11 +14,13 @@ $(document).ready(function () {
 });
 $(function() {
   
-  $(".registration").validate({
+  $("#registration").validate({
     
     rules: {
     
-      fullname: "required",
+      fullname: {
+        required: true,
+      },
       user: "required",
       email: {
         required: true,
@@ -31,11 +33,11 @@ $(function() {
     },
     
     messages: {
-      fullname: "Please enter your fullname",
-      user: "Please enter your user",
+      fullname: "กรุณาระบุชื่อ-สกุล ให้ถูกต้อง",
+      user: "กรุณาระบุ username",
       pass: {
-        required: "Please provide a password",
-        minlength: "กรุณาระบุรหัสอย่างน้อย 5 ตัวอักษร"
+        required: "กรุณาระบุรหัสผ่าน",
+        minlength: "กรุณาระบุรหัสผ่าน ( A-Z,a-z,0-9) ไม่ต่ำกว่า 6 อักษรและไม่เกิน 12 ตัวอักษร"
       },
       email: "กรุณาระบุ Email ที่ถูกต้อง"
     },
@@ -160,27 +162,32 @@ function initAuth(){
   
   
 }
-function login() { 
-
-  var username = document.getElementById('username').value;
-  var password = document.getElementById('password').value;
+async function login() { 
+  let validate = false
+  var username = await document.getElementById('username').value;
+  var password = await document.getElementById('password').value;
   alert("username:" + username)
   alert("password:" + password)
-  db.collection("user").get().then((querySnapshot) => {
+  await db.collection("user").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
        console.log(`${doc.id} => ${doc.data().username}`);
        if(doc.data().username == username && doc.data().password == password ){
-        
+
+         validate = true;
          checkLogin(doc.data().email,doc.data().password);
        }
-       else{
-        
-       }
+       
         
     });
   });
-
+  if(validate == false){
+    handleLoginError()
+  }
 };
+
+function handleLoginError(){
+
+}
 
 function checkLogin(email,password){
   firebase.auth().signInWithEmailAndPassword(email,password).then(function (data) {
@@ -191,6 +198,7 @@ function checkLogin(email,password){
 
  }).catch(function (error) {
    // Handle Errors here.
+   handleLoginError();
    alert("test auth");
    var errorCode = error.code;
    var errorMessage = error.message;
@@ -219,85 +227,119 @@ function forgot(){
 // }
 
 //getData() // อันนี้เราทดลองเรียกฟังก์ชั่นข้างล่างเฉยๆ
-function getData() { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง
+async function getData() { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง
 
-  let solaryear = document.getElementById("year").value;
-  let solarmonth = document.getElementById("month").value;
-  let solarday = document.getElementById("day").value;
-   getAPI(solaryear,solarmonth,solarday)
-  getAPI(solaryear,solarmonth-9,solarday)
-  
-  
+  let solaryear = await document.getElementById("year").value;
+  let solarmonth = await document.getElementById("month").value;
+  let solarday = await document.getElementById("day").value;
+ 
+   
+   
+  let val1 = await getAPI(solaryear,solarmonth,solarday)
+  let val2 = await getAPI(solaryear,solarmonth-9,solarday)
+   console.log("test"+val1)
+ /*await localStorage.setItem("val1", val1);
+ await localStorage.setItem("val2", val2);*/
+  window.location.href = 'output.html'
+}
+
+function sendOutput(){
+  let obj1 = localStorage.getItem("val1");
+  let obj2 = localStorage.getItem("val2");
+  console.log("obj1:"+obj1)
+  calculator(obj1);
+  calculator(obj2);
 }
 
 
 
-function getAPI(solaryear,solarmonth,solarday) { 
-  
-  axios.get('https://us-central1-phanomonttm.cloudfunctions.net/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
+
+async function getAPI(solaryear,solarmonth,solarday) { 
+  var objectMoon = {}
+ await axios.get('https://thaicalendarapi.herokuapp.com/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
-      let objectMoon = response.data.data
-      calculator(objectMoon);
+      objectMoon = response.data.data
+      //calculator(objectMoon);
       
       
     })
     .catch(function (error) {
       console.log(error)
     });
+
+    console.log("test:"+objectMoon)
+    return objectMoon
    
 }
 
-
 function calculator(objectMoon){
- 
- var html=''
- var datamoon = ''
-  String(objectMoon.moontype)
+  var html=''
+var datamoon = ''
+
+  String(objectMoon.moontype) 
       if (objectMoon.moontype == "ขึ้น") {
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
-           html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
-          document.getElementById('show_moondate').innerHTML = html;          
+           html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount+'<br>'
+          document.getElementById('show_moondate').innerHTML += html;          
           console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
           if (objectMoon.moonmount == 1) {
-            datamoon += 'กรีสะ'
-            document.getElementById('show_datamoon').innerHTML = datamoon;
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'
+            document.getElementById('show_moondate').innerHTML += datamoon;
             console.log("กรีสะ")
           }
           else if (objectMoon.moonmount == 2) {
-            datamoon += 'สุมนาวาสะ'
-            document.getElementById('show_datamoon').innerHTML = datamoon;
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'
+            document.getElementById('show_moondate').innerHTML += datamoon;
             console.log("สุมนาวาสะ")
           }
           else if (objectMoon.moonmount == 3) {
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("คูถเสมหะ")
           }
           else if (objectMoon.moonmount == 4) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("พัทธะปิตตะ")
           }
           else if (objectMoon.moonmount == 5) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("หทัยวัตถุ")
           }
           else if (objectMoon.moonmount == 6) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("หทัยวาตะ")
           }
           else if (objectMoon.moonmount == 7) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("ศอเสมหะ")
           }
           else if (objectMoon.moonmount == 8) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("อพัทธะปิตตะ")
           }
           else if (objectMoon.moonmount == 9) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("อุทริยะ")
           }
           else if (objectMoon.moonmount == 10) {
-            datamoon += 'สัตถกวาตะ'
-            document.getElementById('show_datamoon').innerHTML = datamoon;
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("สัตถกวาตะ")
           }
           else if (objectMoon.moonmount == 11) {
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'
+            document.getElementById('show_moondate').innerHTML += datamoon;
             console.log("อุระเสมหะ")
           }
           else if (objectMoon.moonmount == 12) {
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("กำเดา")
           }
         }
@@ -306,45 +348,67 @@ function calculator(objectMoon){
       else if (objectMoon.moontype == "แรม"){
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
           html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
-          document.getElementById('show_moondate').innerHTML = html;
+          document.getElementById('show_moondate').innerHTML += html;
 
           console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
-          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
-          document.getElementById('show_moondate').innerHTML = html;
           if (objectMoon.moonmount == 1) {
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("กรีสะ")
           }
           else if (objectMoon.moonmount == 2) {
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("สุมนาวาสะ")
           }
           else if (objectMoon.moonmount == 3) {
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("คูถเสมหะ")
           }
           else if (objectMoon.moonmount == 4) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("พัทธะปิตตะ")
           }
           else if (objectMoon.moonmount == 5) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("หทัยวัตถุ")
           }
           else if (objectMoon.moonmount == 6) {
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("หทัยวาตะ")
           }
           else if (objectMoon.moonmount == 7) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("ศอเสมหะ")
           }
           else if (objectMoon.moonmount == 8) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("อพัทธะปิตตะ")
           }
           else if (objectMoon.moonmount == 9) {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("อุทริยะ")
           }
           else if (objectMoon.moonmount == 10) {
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("สัตถกวาตะ")
           }
           else if (objectMoon.moonmount == 11) {
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("อุระเสมหะ")
           }
           else if (objectMoon.moonmount == 12) {
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'
+            document.getElementById('show_datamoon').innerHTML += datamoon;
             console.log("กำเดา")
           }
         }
