@@ -50,11 +50,12 @@ function regis() {
   })
   .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
+      window.location.href = 'index.html'
   })
   .catch(function(error) {
       console.error("Error adding document: ", error);
   });
-    window.location.href = 'index.html'
+    
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -80,7 +81,7 @@ function initAuth(){
       alert("null Login!");
       window.location.href = 'index.html'
     }
-  });
+  }); 
 }
 
 //logout();
@@ -127,7 +128,6 @@ function checkLogin(email,password){
     alert("sign in success");
     initAuth();
 
-
  }).catch(function (error) {
    // Handle Errors here.
    alert("test auth");
@@ -143,11 +143,16 @@ function checkLogin(email,password){
  });
 }
 function forgot(){
-const email = document.querySelector('#forgotPasswordEmail').value;
-firebase.auth().sendPasswordResetEmail(email)
+  const email = document.getElementById('emailReset').value;
+  firebase.auth().sendPasswordResetEmail(email)
   .then(function() {
 	alert('Reset link has been sent to provided email address');
-  });}
+  }).catch(function (error) {
+    console.log(error)
+  });
+  
+  
+}
 // window.onload = function(e){ 
 //   initAuth();
 // }
