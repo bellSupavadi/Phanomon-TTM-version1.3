@@ -33,13 +33,15 @@ firebase.initializeApp(config);
        timestampsInSnapshots: false
    }); */
 
-function regis() {
+async function regis() {
 
   var fullname = document.getElementById('fullname').value;
   var usern = document.getElementById('user').value;
   var email = document.getElementById('email').value;
   var pass = document.getElementById('pass').value;
 
+  let validate = await checkValidateUser(usern);
+  if(validate){
   const register = firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
     alert("userRegis:" + user);
     db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
@@ -63,6 +65,32 @@ function regis() {
     console.log(error.code + ':' + error.message);
     //  ons.notification.alert(error.code+':'+error.message);
   });
+}else{
+  console.log("รหัสซํ้ากัน")
+}
+}
+
+async function checkValidateUser(username){
+
+  console.log("check:"+username)
+  let validate = true;
+
+ await db.collection("user").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+       console.log(`${doc.id} => ${doc.data().username}`);
+       if(doc.data().username == username){
+
+        validate = false;
+       }
+       console.log("come to check")
+
+    });
+
+   
+
+  });
+ 
+  return validate
 }
 
     // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
