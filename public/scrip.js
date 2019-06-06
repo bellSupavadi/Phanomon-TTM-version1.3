@@ -12,6 +12,39 @@ $(document).ready(function () {
     $(".register").removeClass('active');
   });
 });
+$(function() {
+  
+  $(".registration").validate({
+    
+    rules: {
+    
+      fullname: "required",
+      user: "required",
+      email: {
+        required: true,
+        email: true
+      },
+      pass: {
+        required: true,
+        minlength: 5
+      }
+    },
+    
+    messages: {
+      fullname: "Please enter your fullname",
+      user: "Please enter your user",
+      pass: {
+        required: "Please provide a password",
+        minlength: "กรุณาระบุรหัสอย่างน้อย 5 ตัวอักษร"
+      },
+      email: "กรุณาระบุ Email ที่ถูกต้อง"
+    },
+    
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
 
 var config = {
   apiKey: "AIzaSyBNRq5FqP_x4xMTXbki_ir825uJMnCw0QE",
@@ -137,11 +170,11 @@ function login() {
     querySnapshot.forEach((doc) => {
        console.log(`${doc.id} => ${doc.data().username}`);
        if(doc.data().username == username && doc.data().password == password ){
-         console.log("login success")
+        
          checkLogin(doc.data().email,doc.data().password);
        }
        else{
-
+        
        }
         
     });
@@ -192,7 +225,7 @@ function getData() { // << สร้างฟังก์ชั่นขึ้�
   let solarmonth = document.getElementById("month").value;
   let solarday = document.getElementById("day").value;
    getAPI(solaryear,solarmonth,solarday)
-  // getAPI(solaryear,solarmonth-9,solarday)
+  getAPI(solaryear,solarmonth-9,solarday)
   
   
 }
