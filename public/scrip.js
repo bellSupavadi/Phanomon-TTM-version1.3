@@ -27,9 +27,9 @@ firebase.initializeApp(config);
 //  }
 
 // Initialize Cloud Firestore through Firebase
-/*   var db = firebase.firestore();
+   var db = firebase.firestore();
    // Disable deprecated features
-   db.settings({
+  /* db.settings({
        timestampsInSnapshots: false
    }); */
 
@@ -42,6 +42,18 @@ function regis() {
 
   const register = firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
     alert("userRegis:" + user);
+    db.collection("user").add({
+      fullname: fullname,
+      username: usern,
+      email: email,
+      password: pass
+  })
+  .then(function(docRef) {
+      console.log("Document written with ID: ", docRef.id);
+  })
+  .catch(function(error) {
+      console.error("Error adding document: ", error);
+  });
 
   }).catch(function (error) {
     // Handle Errors here.
@@ -54,7 +66,7 @@ function regis() {
 
  function initAuth() {   // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
 
-  firebase.auth().onAuthStateChanged(function (user) {
+  /*firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("signIN!");
       alert("signIN!");
@@ -68,7 +80,7 @@ function regis() {
       alert("null Login!");
      // window.location.href = 'index.html'
     }
-  });
+  }); */
 }
 
 //logout();
@@ -84,16 +96,30 @@ function regis() {
   
 //  initAuth();
 }
-async function login() { 
+ function login() { 
 
-  var username = document.getElementById('username').value;
-  var password = document.getElementById('password').value;
-  alert("username:" + username)
-  alert("password:" + password)
-   await firebase.auth().signInWithEmailAndPassword(username, password).then(async function (data) {
+  var username=   document.getElementById('userEmail').value;
+  var password=   document.getElementById('password').value;
+ 
+  db.collection("user").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+       console.log(`${doc.id} => ${doc.data().username}`);
+       if(doc.data().username == username && doc.data().password == password ){
+         console.log("login success")
+         checkLogin(doc.data().email,doc.data().password);
+       }
+       else{
 
-    await alert("data:"+data);
-    await alert("sign in success");
+       }
+        
+    });
+  });
+  
+
+   /*firebase.auth().signInWithEmailAndPassword(username,password).then(function (data) {
+
+    
+     alert("sign in success");
    //initAuth();
 
 
@@ -109,9 +135,32 @@ async function login() {
 
     }
 
-  });
+  });*/
   
 };
+
+function checkLogin(email,password){
+  firebase.auth().signInWithEmailAndPassword(email,password).then(function (data) {
+
+    
+    alert("sign in success");
+  //initAuth();
+
+
+ }).catch(function (error) {
+   // Handle Errors here.
+   alert("test auth");
+   var errorCode = error.code;
+   var errorMessage = error.message;
+   if (errorCode != 'auth/wrong-password') {
+     alert('Wrong password.');
+   } else {
+     alert(errorMessage);
+
+   }
+
+ });
+}
 
 
 
