@@ -191,35 +191,48 @@ function getData() { // << สร้างฟังก์ชั่นขึ้�
   let solaryear = document.getElementById("year").value;
   let solarmonth = document.getElementById("month").value;
   let solarday = document.getElementById("day").value;
-  // getAPI(solaryear,solarmonth,solarday)
+   getAPI(solaryear,solarmonth,solarday)
   getAPI(solaryear,solarmonth-9,solarday)
+  
+  
 }
 
 
-function getAPI(solaryear,solarmonth,solarday) { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง 
+
+function getAPI(solaryear,solarmonth,solarday) { 
   
   axios.get('https://us-central1-phanomonttm.cloudfunctions.net/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
       let objectMoon = response.data.data
-
       calculator(objectMoon);
+      
       
     })
     .catch(function (error) {
       console.log(error)
     });
+   
 }
+
 
 function calculator(objectMoon){
  
+ var html=''
+ var datamoon = ''
   String(objectMoon.moontype)
       if (objectMoon.moontype == "ขึ้น") {
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
+           html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
+          document.getElementById('show_moondate').innerHTML = html;          
           console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
           if (objectMoon.moonmount == 1) {
+            datamoon += 'กรีสะ'
+            document.getElementById('show_datamoon').innerHTML = datamoon;
             console.log("กรีสะ")
           }
           else if (objectMoon.moonmount == 2) {
+            datamoon += 'สุมนาวาสะ'
+            document.getElementById('show_datamoon').innerHTML = datamoon;
             console.log("สุมนาวาสะ")
           }
           else if (objectMoon.moonmount == 3) {
@@ -244,6 +257,8 @@ function calculator(objectMoon){
             console.log("อุทริยะ")
           }
           else if (objectMoon.moonmount == 10) {
+            datamoon += 'สัตถกวาตะ'
+            document.getElementById('show_datamoon').innerHTML = datamoon;
             console.log("สัตถกวาตะ")
           }
           else if (objectMoon.moonmount == 11) {
@@ -253,10 +268,16 @@ function calculator(objectMoon){
             console.log("กำเดา")
           }
         }
+        
       }
       else if (objectMoon.moontype == "แรม"){
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
+          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
+          document.getElementById('show_moondate').innerHTML = html;
+
           console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
+          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
+          document.getElementById('show_moondate').innerHTML = html;
           if (objectMoon.moonmount == 1) {
             console.log("กรีสะ")
           }
@@ -298,4 +319,5 @@ function calculator(objectMoon){
       else {
         console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
       } // << ตรงนี้เป็นความผิดพลาดของเราเอง ให้พิมพ์ response.data.data อีกทีนึงนะ มันมี data เบิ้ลมา
+          
 }
