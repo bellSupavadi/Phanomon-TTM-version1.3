@@ -6,10 +6,10 @@
     box-sizing: border-box;
   }
   body{
-      background-image: linear-gradient(to right, #3584A7 51%, #30D2BE 100%);
-   
-      font-family: 'Source Serif Pro', serif;
-      font-size: 25px;
+    background-image: linear-gradient(to right, #3584A7 51%, #30D2BE 100%);
+    font-family: 'Source Serif Pro', serif;
+    font-size: 15px;
+    color: red;
   }
     .TableLine {
       border-top-style: none;
@@ -104,7 +104,9 @@
       display: block;
     }
     
-  
+   .email-error{
+     
+   }
   
   
     
