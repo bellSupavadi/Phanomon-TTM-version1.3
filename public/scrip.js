@@ -42,9 +42,9 @@ $(function() {
       email: "กรุณาระบุ Email ที่ถูกต้อง"
     },
     
-    submitHandler: function(form) {
+   /* submitHandler: function(form) {
       form.submit();
-    }
+    } */
   });
 });
 
@@ -212,7 +212,7 @@ function checkLogin(email,password){
  });
 }
 function forgot(){
-  const email = document.getElementById('emailReset').value;
+  let email = document.getElementById('emailReset').value;
   firebase.auth().sendPasswordResetEmail(email)
   .then(function() {
 	alert('Reset link has been sent to provided email address');
@@ -222,33 +222,78 @@ function forgot(){
   
   
 }
-// window.onload = function(e){ 
-//   initAuth();
-// }
 
-//getData() // อันนี้เราทดลองเรียกฟังก์ชั่นข้างล่างเฉยๆ
-async function getData() { // << สร้างฟังก์ชั่นขึ้นมาสักอันนึง
 
-  let solaryear = await document.getElementById("year").value;
-  let solarmonth = await document.getElementById("month").value;
-  let solarday = await document.getElementById("day").value;
+
+function resetPassword(){
+  let params = (new URL(document.location)).searchParams;
+  let email = params.get("email");
+  let password = document.getElementById('newPass').value;
+  //console.log(email)
+  let validate = resetValidate(email,password)
+  if(validate){
+    console.log("ไปหน้าหลัก");
+  }else{
+    console.log("ขึ้น Error");
+  }
+}
+
+
+async function resetValidate(email,password){
+
+  console.log("check:"+email)
+  let validate = false;
+
+ await db.collection("user").where("email", "==", email).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+       console.log(`${doc.id} => ${doc.data().username}`);
+       if(doc.data().email == email){
+        db.collection("user").doc(doc.id).update({password: `${password}`});
+        validate = true;
+       }
+       console.log("come to check")
+
+    });
+
+  });
  
+  return validate
+}
+
+async function getData() { 
+
+  let solaryear =  document.getElementById("year").value;
+  let solarmonth =  document.getElementById("month").value;
+  let solarday =  document.getElementById("day").value;
+  
+  let solarmonthPlus = solarmonth - 9
+  
    
    
-  let val1 = await getAPI(solaryear,solarmonth,solarday)
-  let val2 = await getAPI(solaryear,solarmonth-9,solarday)
-   console.log("test"+val1)
- /*await localStorage.setItem("val1", val1);
- await localStorage.setItem("val2", val2);*/
+  let val1 =  await getAPI(solaryear,solarmonth,solarday)
+  let val2 = 'null'
+  if(solarmonthPlus >= 0){
+   val2 =  await getAPI(solaryear,solarmonthPlus,solarday)
+  }
+  
+  
+  localStorage.setItem("val1", JSON.stringify(val1))
+  localStorage.setItem("val2", JSON.stringify(val2))
+  console.log(localStorage.getItem("val1"))
+  console.log(localStorage.getItem("val2"))
   window.location.href = 'output.html'
 }
+  
 
 function sendOutput(){
   let obj1 = localStorage.getItem("val1");
   let obj2 = localStorage.getItem("val2");
   console.log("obj1:"+obj1)
+  console.log("obj2:"+obj2)
   calculator(obj1);
+  if(obj2 != null){
   calculator(obj2);
+  }
 }
 
 
@@ -267,15 +312,15 @@ async function getAPI(solaryear,solarmonth,solarday) {
       console.log(error)
     });
 
-    console.log("test:"+objectMoon)
     return objectMoon
    
 }
 
-function calculator(objectMoon){
+function calculator(objMoon){
   var html=''
 var datamoon = ''
-
+let objectMoon = JSON.parse(objMoon)
+  console.log("ObjectMoon:"+objectMoon.solarday)
   String(objectMoon.moontype) 
       if (objectMoon.moontype == "ขึ้น") {
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
