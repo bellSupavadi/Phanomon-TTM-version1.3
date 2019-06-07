@@ -225,12 +225,12 @@ function forgot(){
 
 
 
-function resetPassword(){
+async function resetPassword(){
   let params = (new URL(document.location)).searchParams;
   let email = params.get("email");
   let password = document.getElementById('newPass').value;
   //console.log(email)
-  let validate = resetValidate(email,password)
+  let validate = await resetValidate(email,password)
   if(validate){
     console.log("ไปหน้าหลัก");
   }else{
@@ -243,21 +243,59 @@ async function resetValidate(email,password){
 
   console.log("check:"+email)
   let validate = false;
+  let oldpassword = null;
 
- await db.collection("user").where("email", "==", email).get().then((querySnapshot) => {
+  await db.collection("user").where("email", "==", email).get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
        console.log(`${doc.id} => ${doc.data().username}`);
        if(doc.data().email == email){
+        oldpassword = doc.data().password;
         db.collection("user").doc(doc.id).update({password: `${password}`});
+       
         validate = true;
+        
        }
        console.log("come to check")
 
     });
 
   });
- 
+
+  await increaseToFriebaseAuth(email,oldpassword,password);
   return validate
+}
+
+async function increaseToFriebaseAuth(email,oldpassword,password){
+  let user
+  let loadFinish = false
+  await firebase.auth().signInWithEmailAndPassword(email,oldpassword).then(function (data) {
+    console.log(oldpassword)
+    user = firebase.auth().currentUser;
+    loadFinish = true;
+ }).catch(function (error) {
+   // Handle Errors here.
+   console.log(oldpassword)
+   var errorCode = error.code;
+   var errorMessage = error.message;
+   if (errorCode != 'auth/wrong-password') {
+     alert('Wrong password.');
+   } else {
+     alert(errorMessage);
+
+   }
+
+ });
+
+ if(loadFinish){
+  await user.updatePassword(password).then(function() {
+  // Update successful.
+  console.log("update password success")
+  }).catch(function(error) {
+  // An error happened.
+  console.log(error)
+  });
+  
+  }
 }
 
 async function getData() { 
