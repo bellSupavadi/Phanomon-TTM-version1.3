@@ -261,7 +261,9 @@ async function resetValidate(email,password){
 
   });
 
+  if(validate == true){
   await increaseToFriebaseAuth(email,oldpassword,password);
+  }
   return validate
 }
 
