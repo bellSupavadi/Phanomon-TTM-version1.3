@@ -27,7 +27,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
-  <title>Welcome</title>
+  <title>PhanomonTTM</title>
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -42,7 +42,7 @@
 
     <!-- Image and text -->
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="index.html">
             <img src="logo.jpg" width="30" height="30" class="d-inline-block align-top" alt="" style="margin-right: 5%"> PhanomonTTM
         </a>
     
@@ -57,9 +57,11 @@
         <br>
 
         <div class="shadow-lg p-5 mb-5 rounded" id="main">
-                <input type="email" class="form-control form-control-lg" id="emailReset" name="emailReset"  placeholder="E-mail for reset password"
+          <label>กรุณาระบุ Email สำหรับส่งข้อมูลให้ทาง Email ของผู้ใช้สามารถเปลี่ยนรหัสผ่านได้</label>
+          <hr>
+                <input type="email" class="form-control form-control-lg" id="emailReset" name="emailReset"  placeholder="Email"
                 aria-describedby="helpId" required autofocus><br>
-               <button type="submit" class="btn btn-primary"  onclick="forgot()">Reset password</button>
+               <button type="submit" class="btn btn-primary"  onclick="forgot()">ส่งเข้า Email</button>
             </div>
 
     </div>

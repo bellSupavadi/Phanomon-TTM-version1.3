@@ -34,7 +34,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
-  <title>Welcome</title>
+  <title>PhanomonTTM</title>
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -54,7 +54,7 @@
         </a>
       
 
-            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="logout()">Logout</button>
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="logout()">ออกจากระบบ</button>
       
     </nav>
 
@@ -67,17 +67,28 @@
         <br>
 
         <div class="shadow-lg p-5 mb-5 rounded" id="main">
-      
-            <h5>วัน/เดือน/ปี เกิด
-            <select id="day"></select>
-            <select id="month"></select>
-            <select id="year"></select></h5> 
+            <form class="form"id="myForm">
+                <center><label for="">ข้อมูลทั่วไป</label></center>
+              <hr>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>วัน/เดือน/ปี เกิด&nbsp;
+                            <select id="day"></select>&nbsp; /&nbsp;
+                            <select id="month"></select>&nbsp; /&nbsp;
+                            <select id="year"></select></h5> 
+                    </div>
+                    <div class="col-sm-6"> 
+                        <h5>ระยะการตั้งครรภ์&nbsp;
+                            <select id="period"></select>&nbsp;เดือน</h5>  
+                    </div>
         
-                <h5>ระยะการตั้งครรภ์
-                <select id="period"></select></h5> 
+                  </div>
+           
+        
+             <br>
                
                 <label for="age">อายุ :</label>
-                  <input type="text"
+                  <input type="number"
                     class="form-control" name="" id="age" aria-describedby="helpId" placeholder="">
                   <small id="helpId" class="form-text text-muted"></small>
 
@@ -89,12 +100,14 @@
 
                   <label for="address">ที่อยู่:</label>
                   <textarea class="form-control" rows="5" id="address"></textarea>
-               
-                  <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="getData()" >เริ่ม</button>
-                  <div id="show_moondate"></div>
-                  <div id="show_datamoon"></div>
+               </form>
+               <br>
+                  <center><button class="btn btn-success my-2 my-sm-0" type="submit" onclick="getData()" >เริ่ม</button>
+                   &nbsp; <input type="button"class="btn btn-danger my-2 my-sm-0" onclick="myFunction()" value="ลบข้อมูล">
+                  </center>
+                  
             </div>
-          
+          </div>
 
     </div>
 
@@ -146,6 +159,7 @@
 
       }
       document.getElementById("period").innerHTML = period;
+
       
       </script>
       

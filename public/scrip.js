@@ -21,7 +21,9 @@ $(function() {
       fullname: {
         required: true,
       },
-      user: "required",
+      user: {
+        required: true,
+      },
       email: {
         required: true,
         email: true
@@ -49,13 +51,13 @@ $(function() {
 });
 
 var config = {
-  apiKey: "AIzaSyBNRq5FqP_x4xMTXbki_ir825uJMnCw0QE",
-  authDomain: "phanomonttm.firebaseapp.com",
-  databaseURL: "https://phanomonttm.firebaseio.com",
-  projectId: "phanomonttm",
-  storageBucket: "phanomonttm.appspot.com",
-  messagingSenderId: "39151834196",
-  appId: "1:39151834196:web:f581d3e227550098"
+  apiKey: "AIzaSyAPmqcYlY0Sv7FBrD9xRM9s_xTnT5dA6iY",
+    authDomain: "phanomonttm-96907.firebaseapp.com",
+    databaseURL: "https://phanomonttm-96907.firebaseio.com",
+    projectId: "phanomonttm-96907",
+    storageBucket: "phanomonttm-96907.appspot.com",
+    messagingSenderId: "555465126729",
+    appId: "1:555465126729:web:193e184a24570eaf"
 };
 //   if (!firebase.apps.length) {
 firebase.initializeApp(config);
@@ -77,8 +79,8 @@ async function regis() {
 
   let validate = await checkValidateUser(usern);
   if(validate){
-  const register = firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
-    alert("userRegis:" + user);
+  const register = await firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
+    alert("ลงทะเบียนเรียบร้อย");
     db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
       fullname: fullname,
       username: usern,
@@ -87,6 +89,7 @@ async function regis() {
   })
   .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
+      
       window.location.href = 'index.html'
   })
   .catch(function(error) {
@@ -101,13 +104,13 @@ async function regis() {
     //  ons.notification.alert(error.code+':'+error.message);
   });
 }else{
-  console.log("รหัสซํ้ากัน")
+  // console.log("รหัสซํ้ากัน")
 }
 }
 
 async function checkValidateUser(username){
 
-  console.log("check:"+username)
+  
   let validate = true;
 
  await db.collection("user").get().then((querySnapshot) => {
@@ -117,7 +120,7 @@ async function checkValidateUser(username){
 
         validate = false;
        }
-       console.log("come to check")
+      //  console.log("come to check")
 
     });
 
@@ -132,16 +135,16 @@ async function checkValidateUser(username){
 function initAuth(){
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-      console.log("signIN!");
-      alert("signIN!");
+      // console.log("signIN!");
+      alert("เข้าสู่ระบบเรียบร้อย");
       
           window.location.href = 'home.html'
           // ...
         }
   
      else {
-      console.log("null Login");
-      alert("null Login!");
+      
+     
       window.location.href = 'index.html'
     }
   }); 
@@ -152,12 +155,12 @@ function initAuth(){
 
   firebase.auth().signOut().then(function () {
     // Sign-out successful.
-    console.log('User Logged Out!');
+    alert("ออกจากระบบ");
    // window.location.href = 'index.html'
     initAuth();
   }).catch(function (error) {
     // An error happened.
-    console.log(error);
+    // console.log(error);
   });
   
   
@@ -166,8 +169,7 @@ async function login() {
   let validate = false
   var username = await document.getElementById('username').value;
   var password = await document.getElementById('password').value;
-  alert("username:" + username)
-  alert("password:" + password)
+  
   await db.collection("user").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
        console.log(`${doc.id} => ${doc.data().username}`);
@@ -193,17 +195,17 @@ function checkLogin(email,password){
   firebase.auth().signInWithEmailAndPassword(email,password).then(function (data) {
 
     
-    alert("sign in success");
+    // alert("sign in success");
     initAuth();
 
  }).catch(function (error) {
    // Handle Errors here.
    handleLoginError();
-   alert("test auth");
+   alert("Username ไม่ถูกต้อง");
    var errorCode = error.code;
    var errorMessage = error.message;
    if (errorCode != 'auth/wrong-password') {
-     alert('Wrong password.');
+     alert('รหัสผ่านไม่ถูกต้อง');
    } else {
      alert(errorMessage);
 
@@ -215,9 +217,9 @@ function forgot(){
   let email = document.getElementById('emailReset').value;
   firebase.auth().sendPasswordResetEmail(email)
   .then(function() {
-	alert('Reset link has been sent to provided email address');
+	alert('กรุณาตรวจเช็ค Email ของคุณ สำหรับขอรหัสผ่านใหม่ !');
   }).catch(function (error) {
-    console.log(error)
+    
   });
   
   
@@ -232,22 +234,23 @@ async function resetPassword(){
   //console.log(email)
   let validate = await resetValidate(email,password)
   if(validate){
-    console.log("ไปหน้าหลัก");
+    // console.log('hhhhh')
+   alert('สร้างรหัสผ่านใหม่เรียบร้อย')
   }else{
-    console.log("ขึ้น Error");
+   
   }
 }
 
 
 async function resetValidate(email,password){
 
-  console.log("check:"+email)
+ 
   let validate = false;
   let oldpassword = null;
 
   await db.collection("user").where("email", "==", email).get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-       console.log(`${doc.id} => ${doc.data().username}`);
+      
        if(doc.data().email == email){
         oldpassword = doc.data().password;
         db.collection("user").doc(doc.id).update({password: `${password}`});
@@ -271,16 +274,16 @@ async function increaseToFriebaseAuth(email,oldpassword,password){
   let user
   let loadFinish = false
   await firebase.auth().signInWithEmailAndPassword(email,oldpassword).then(function (data) {
-    console.log(oldpassword)
+   
     user = firebase.auth().currentUser;
     loadFinish = true;
  }).catch(function (error) {
    // Handle Errors here.
-   console.log(oldpassword)
+   
    var errorCode = error.code;
    var errorMessage = error.message;
    if (errorCode != 'auth/wrong-password') {
-     alert('Wrong password.');
+     alert('รหัสผ่านไม่ถูกต้อง');
    } else {
      alert(errorMessage);
 
@@ -291,7 +294,8 @@ async function increaseToFriebaseAuth(email,oldpassword,password){
  if(loadFinish){
   await user.updatePassword(password).then(function() {
   // Update successful.
-  console.log("update password success")
+  
+  // alert("เปลี่ยนรหัสผ่านเรียบร้อย")
   }).catch(function(error) {
   // An error happened.
   console.log(error)
@@ -305,22 +309,32 @@ async function getData() {
   let solaryear =  document.getElementById("year").value;
   let solarmonth =  document.getElementById("month").value;
   let solarday =  document.getElementById("day").value;
-  
+  let per =  document.getElementById("period").value;
+  let ag = document.getElementById("age").value;
+  let profes = document.getElementById("profession").value;
+  let add = document.getElementById("address").value;
+ 
+
   let solarmonthPlus = solarmonth - 9
   
-   
-   
+  
   let val1 =  await getAPI(solaryear,solarmonth,solarday)
   let val2 = 'null'
   if(solarmonthPlus >= 0){
    val2 =  await getAPI(solaryear,solarmonthPlus,solarday)
   }
-  
+  let val3 = profes
+  let val4 = ag
+  let val5 = add
+  let val6 = per
   
   localStorage.setItem("val1", JSON.stringify(val1))
   localStorage.setItem("val2", JSON.stringify(val2))
-  console.log(localStorage.getItem("val1"))
-  console.log(localStorage.getItem("val2"))
+  localStorage.setItem("val3",val3)
+  localStorage.setItem("val4",val4)
+  localStorage.setItem("val5",val5)
+  localStorage.setItem("val6",val6)
+ 
   window.location.href = 'output.html'
 }
   
@@ -328,20 +342,37 @@ async function getData() {
 function sendOutput(){
   let obj1 = localStorage.getItem("val1");
   let obj2 = localStorage.getItem("val2");
-  console.log("obj1:"+obj1)
-  console.log("obj2:"+obj2)
+  let obj3 = localStorage.getItem("val3");
+  let obj4 = localStorage.getItem("val4");
+  let obj5 = localStorage.getItem("val5");
+  let obj6 = localStorage.getItem("val6");
+ 
+  sentDataarea(obj4,obj3,obj5,obj6);
   calculator(obj1);
   if(obj2 != null){
   calculator(obj2);
-  }
+  };
+  
+  
+  
+       
 }
+function sentDataarea(ag,profes,add,per){
+var area=''
+let objPro = profes
+let objAg = ag
+let objAdd = add
+let objPer = per
+area +='ระยะตั้งครรภ์ : '+objPer+'  '+'เดือน'+'<br>'+'อายุ  : '+objAg+'  '+'ปี'+'<br>'+'อาชีพ : '+objPro+'<br>'+'ที่อยู่ : '+objAdd+'<br>'
+document.getElementById('showData').innerHTML += area;  
 
+}
 
 
 
 async function getAPI(solaryear,solarmonth,solarday) { 
   var objectMoon = {}
- await axios.get('https://thaicalendarapi.herokuapp.com/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
+ await axios.get('https://moondateapp.herokuapp.com/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
       objectMoon = response.data.data
       //calculator(objectMoon);
@@ -361,148 +392,152 @@ function calculator(objMoon){
   var html=''
 var datamoon = ''
 let objectMoon = JSON.parse(objMoon)
-  console.log("ObjectMoon:"+objectMoon.solarday)
+  
   String(objectMoon.moontype) 
       if (objectMoon.moontype == "ขึ้น") {
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
-           html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount+'<br>'
+           html +='<br>' +objectMoon.moontype +'  '+ objectMoon.moonday +'  '+ 'ค่ำ' +'  '+ 'เดือน' +'  '+ objectMoon.moonmount+'<br>'
           document.getElementById('show_moondate').innerHTML += html;          
-          console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
+          
           if (objectMoon.moonmount == 1) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'+'<br>'
             document.getElementById('show_moondate').innerHTML += datamoon;
-            console.log("กรีสะ")
+            
           }
           else if (objectMoon.moonmount == 2) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'+'<br>'
             document.getElementById('show_moondate').innerHTML += datamoon;
-            console.log("สุมนาวาสะ")
+            
           }
           else if (objectMoon.moonmount == 3) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("คูถเสมหะ")
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 4) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("พัทธะปิตตะ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 5) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("หทัยวัตถุ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 6) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("หทัยวาตะ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 7) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("ศอเสมหะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 8) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("อพัทธะปิตตะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 9) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("อุทริยะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 10) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("สัตถกวาตะ")
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 11) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'+'<br>'
             document.getElementById('show_moondate').innerHTML += datamoon;
-            console.log("อุระเสมหะ")
+            
           }
           else if (objectMoon.moonmount == 12) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("กำเดา")
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
         }
         
       }
       else if (objectMoon.moontype == "แรม"){
         if (objectMoon.moonday >= 1 && objectMoon.moonday <= 15) {
-          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
+          html +='<br>' +objectMoon.moontype +'  '+ objectMoon.moonday +'  '+ 'ค่ำ' +'  '+ 'เดือน' +'  '+ objectMoon.moonmount+'<br>'
           document.getElementById('show_moondate').innerHTML += html;
 
-          console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
-          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
-          document.getElementById('show_moondate').innerHTML = html;
+          
           if (objectMoon.moonmount == 1) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("กรีสะ")
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 2) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("สุมนาวาสะ")
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : สุมนาวาสะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุปถวี'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 3) {
-            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("คูถเสมหะ")
+            datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : คูถเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุปถวี'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 4) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("พัทธะปิตตะ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : พัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 5) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("หทัยวัตถุ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวัตถุ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 6) {
-            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("หทัยวาตะ")
+            datamoon +='ธาตุประจำราศี : ไฟ'+'<br>'+ 'ธาตุแสดงผล : วาโยธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : หทัยวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุเตโช'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 7) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("ศอเสมหะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุกำเริบ'+'<br>'+'พิกัดธาตุที่ระคน : ศอเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 8) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("อพัทธะปิตตะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 9) {
-            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("อุทริยะ")
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 10) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("สัตถกวาตะ")
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : วาโธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : สัตถกวาตะ'+'<br>'+'อสุริญธัญญาณธาตุ : มันทธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 11) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("อุระเสมหะ")
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : อาโปธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุระเสมหะ'+'<br>'+'อสุริญธัญญาณธาตุ : กติกธาตุอาโป'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
           else if (objectMoon.moonmount == 12) {
-            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'
-            document.getElementById('show_datamoon').innerHTML += datamoon;
-            console.log("กำเดา")
+            datamoon +='ธาตุประจำราศี : น้ำ'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กำเดา'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุอาโป'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
           }
         }
       }
       else {
-        console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
+        
       } // << ตรงนี้เป็นความผิดพลาดของเราเอง ให้พิมพ์ response.data.data อีกทีนึงนะ มันมี data เบิ้ลมา
           
+}
+function myFunction() {
+  document.getElementById("myForm").reset();
+}
+function myback(){
+  window.location.href = 'home.html';
 }

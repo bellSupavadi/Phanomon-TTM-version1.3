@@ -8,8 +8,8 @@
   body{
     background-image: linear-gradient(to right, #3584A7 51%, #30D2BE 100%);
     font-family: 'Source Serif Pro', serif;
-    font-size: 15px;
-    color: red;
+    font-size: 20px;
+    color: black;
   }
     .TableLine {
       border-top-style: none;
@@ -104,9 +104,13 @@
       display: block;
     }
     
-   .email-error{
+    #email-error,#pass-error,#fullname-error{
+      font-size: 15px;
+     color: red;
      
    }
-  
+  .show_moondate{
+    margin-left: 25%;
+  }
   
     

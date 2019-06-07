@@ -27,7 +27,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
-  <title>Welcome</title>
+  <title>PhanomonTTM</title>
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -46,10 +46,10 @@
     <div class="shadow-lg p-5 mb-5 rounded" id="main">
       <div id="tab-btn">
         <a href="#" class="login active">
-          <h2>Login</h2>
+          <h2>เข้าสู่ระบบ</h2>
         </a>
         <a href="#" class="register">
-          <h2>Sign Up</h2>
+          <h2>ลงทะเบียน</h2>
         </a>
       </div>
       <center>
@@ -65,8 +65,8 @@
               aria-describedby="helpId" required autofocus><br>
             <input type="password" class="form-control form-control-lg" id="password" name="password"  placeholder="Password"
               aria-describedby="helpId" required><br>
-            <a href="sentmail.html" id="forgot" >Forgot Password</a> <br>
-            <button type="submit" name="submit1" class="btn btn-primary" id="login-btn" onclick="login()">Login</button> <!-- เราเปลี่ยน id ให้ปุ่ม เพราะก่อนหน้านี้มันซํ้ากัน -->
+            <a href="sentmail.html" id="forgot"style='margin-left: 80%;' >ลืมรหัสผ่าน</a> <br>
+           <center> <button type="submit" name="submit1" class="btn btn-success" id="login-btn" onclick="login()">เข้าสู่ระบบ</button> </center><!-- เราเปลี่ยน id ให้ปุ่ม เพราะก่อนหน้านี้มันซํ้ากัน -->
           </div>
 
 
@@ -74,17 +74,17 @@
       </div>
 
       <div class="other" >
-        <form id="registration" > 
+         <form action ="javascript:regis();"id="registration" > 
           <div class="form-group">
-            <input type="text" id="fullname" class="form-control form-control-lg" placeholder="Enter Fullname"
+            <input type="text" id="fullname" class="form-control form-control-lg" placeholder="ระบุชื่อ - สกุล"
               class="inp" ><br>
-            <input type="text" id="user" class="form-control form-control-lg" placeholder="Enter Username" class="inp"
+            <input type="text" id="user" class="form-control form-control-lg" placeholder="ระบุ Username" class="inp"
             ><br>
-            <input type="email" id="email" class="form-control form-control-lg" name="email" placeholder="Enter Email"
+            <input type="email" id="email" class="form-control form-control-lg" name="email" placeholder="ระบุ Email"
               class="inp" required><br>
             <input type="password" id="pass" class="form-control form-control-lg" name="pass"
-              placeholder="Enter Password" class="inp" required><br>
-            <button type="submit" name="submit" class="btn btn-primary" id="regis-btn" onclick="regis()">Submit</button><br>
+              placeholder="ระบุรหัสผ่าน" class="inp" required><br>
+           <center> <input type="submit" name="" class="btn btn-primary" id="regis-btn" value="ลงทะเบียน"></input></center><br>
            
            </form> 
       </div>
@@ -98,7 +98,7 @@
   <br>
   <br>
 
-
+  <script src="/header/checkValidIndex.js"></script>
 
 </body>
 
