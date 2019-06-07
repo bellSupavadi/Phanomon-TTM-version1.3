@@ -307,6 +307,7 @@ async function getAPI(solaryear,solarmonth,solarday) {
       //calculator(objectMoon);
       
       
+      
     })
     .catch(function (error) {
       console.log(error)
@@ -396,6 +397,8 @@ let objectMoon = JSON.parse(objMoon)
           document.getElementById('show_moondate').innerHTML += html;
 
           console.log(objectMoon.moontype + objectMoon.moonday + "ค่ำ" + "เดือน" + objectMoon.moonmount);
+          html += objectMoon.moontype + objectMoon.moonday + 'ค่ำ' + 'เดือน' + objectMoon.moonmount
+          document.getElementById('show_moondate').innerHTML = html;
           if (objectMoon.moonmount == 1) {
             datamoon +='ธาตุประจำราศี : ดิน'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุพิการ'+'<br>'+'พิกัดธาตุที่ระคน : กรีสะ'+'<br>'+'อสุริญธัญญาณธาตุ : สมธาตุปถวี'
             document.getElementById('show_datamoon').innerHTML += datamoon;
