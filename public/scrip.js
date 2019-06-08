@@ -44,9 +44,6 @@ $(function() {
       email: "กรุณาระบุ Email ที่ถูกต้อง"
     },
     
-   /* submitHandler: function(form) {
-      form.submit();
-    } */
   });
 });
 
@@ -59,16 +56,12 @@ var config = {
     messagingSenderId: "555465126729",
     appId: "1:555465126729:web:193e184a24570eaf"
 };
-//   if (!firebase.apps.length) {
 firebase.initializeApp(config);
-//  }
+
 
 // Initialize Cloud Firestore through Firebase
    var db = firebase.firestore();
-   // Disable deprecated features
- /*  db.settings({
-       timestampsInSnapshots: false
-   }); */
+
 
 async function regis() {
 
@@ -106,7 +99,7 @@ async function regis() {
 
 
 async function addUser(fullname,usern,email,pass){
-  const addUser = await db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
+  const addUser = await db.collection("user").add({ 
      fullname: fullname,
      username: usern,
      email: email,
@@ -145,11 +138,10 @@ async function checkValidateUser(username,email){
   return validate
 }
 
-    // ฟังก์ชั่นนี้ใช้เช็คว่า มีการ Login เข้ามาแล้วหรือไม่   
+
 function initAuth(){
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-      // console.log("signIN!");
       alert("เข้าสู่ระบบเรียบร้อย");
       
           window.location.href = 'home.html'
@@ -164,17 +156,15 @@ function initAuth(){
   }); 
 }
 
-//logout();
+
  function logout() {
 
   firebase.auth().signOut().then(function () {
     // Sign-out successful.
     alert("ออกจากระบบ");
-   // window.location.href = 'index.html'
     initAuth();
   }).catch(function (error) {
     // An error happened.
-    // console.log(error);
   });
   
   
@@ -186,7 +176,6 @@ async function login() {
   
   await db.collection("user").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-       console.log(`${doc.id} => ${doc.data().username}`);
        if(doc.data().username == username && doc.data().password == password ){
 
          validate = true;
@@ -245,11 +234,10 @@ async function resetPassword(){
   let params = (new URL(document.location)).searchParams;
   let email = params.get("email");
   let password = document.getElementById('newPass').value;
-  //console.log(email)
   let validate = await resetValidate(email,password)
   if(validate){
-    // console.log('hhhhh')
    alert('สร้างรหัสผ่านใหม่เรียบร้อย')
+   alert('ผู้ใช้งานสามารถปิดหน้านี้แล้วกลับเข้าใช้งานได้')
   }else{
    
   }
@@ -272,8 +260,6 @@ async function resetValidate(email,password){
         validate = true;
         
        }
-       console.log("come to check")
-
     });
 
   });
@@ -307,11 +293,8 @@ async function increaseToFriebaseAuth(email,oldpassword,password){
 
  if(loadFinish){
   await user.updatePassword(password).then(function() {
-  // Update successful.
-  
-  // alert("เปลี่ยนรหัสผ่านเรียบร้อย")
+
   }).catch(function(error) {
-  // An error happened.
   console.log(error)
   });
   
@@ -546,7 +529,7 @@ let objectMoon = JSON.parse(objMoon)
       }
       else {
         
-      } // << ตรงนี้เป็นความผิดพลาดของเราเอง ให้พิมพ์ response.data.data อีกทีนึงนะ มันมี data เบิ้ลมา
+      } 
           
 }
 function myFunction() {
