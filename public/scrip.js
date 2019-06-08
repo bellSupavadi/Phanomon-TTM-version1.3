@@ -123,8 +123,8 @@ async function checkValidateUser(username,email){
 
  await db.collection("user").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-       console.log(`${doc.id} => ${doc.data().username}`);
-       if(doc.data().username == username && doc.data().email == email){
+      
+       if(doc.data().username == username || doc.data().email == email){
 
         validate = false;
        }
@@ -370,7 +370,6 @@ async function getAPI(solaryear,solarmonth,solarday) {
  await axios.get('https://moondateapp.herokuapp.com/api/findDay/' + solaryear + '/' + solarmonth + '/' + solarday + '/')
     .then(function (response) {
       objectMoon = response.data.data
-      //calculator(objectMoon);
       
       
       
