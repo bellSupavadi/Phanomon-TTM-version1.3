@@ -77,38 +77,52 @@ async function regis() {
   var email = document.getElementById('email').value;
   var pass = document.getElementById('pass').value;
 
-  let validate = await checkValidateUser(usern);
+  let validate = await checkValidateUser(usern,email);
+  
   if(validate){
+  await addUser(fullname,usern,email,pass);
   const register = await firebase.auth().createUserWithEmailAndPassword(email, pass).then(function (user) {
-    alert("ลงทะเบียนเรียบร้อย");
-    db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
-      fullname: fullname,
-      username: usern,
-      email: email,
-      password: pass
-  })
-  .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-      
-      window.location.href = 'index.html'
-  })
-  .catch(function(error) {
-      console.error("Error adding document: ", error);
-  });
+    alert("การลงทะเบียนเสร็จสิ้น");
     
+  
   }).catch(function (error) {
-    // Handle Errors here.
+    
     var errorCode = error.code;
     var errorMessage = error.message;
     console.log(error.code + ':' + error.message);
-    //  ons.notification.alert(error.code+':'+error.message);
+   
   });
+
+
 }else{
-  // console.log("รหัสซํ้ากัน")
-}
+  
+  alert("เกิดข้อผิดพลาด รหัสอาจจะซํ้ากัน หรือ อีเมล์นี้มีผู้ใช้แล้ว");
 }
 
-async function checkValidateUser(username){
+
+}
+
+
+
+
+async function addUser(fullname,usern,email,pass){
+  const addUser = await db.collection("user").add({ //เพิ่มใหม่ตรงนี้้
+     fullname: fullname,
+     username: usern,
+     email: email,
+     password: pass
+ })
+ .then(function(docRef) {
+     
+     
+    
+ })
+ .catch(function(error) {
+     console.error("Error adding document: ", error);
+ });
+}
+
+async function checkValidateUser(username,email){
 
   
   let validate = true;
@@ -116,11 +130,11 @@ async function checkValidateUser(username){
  await db.collection("user").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
        console.log(`${doc.id} => ${doc.data().username}`);
-       if(doc.data().username == username){
+       if(doc.data().username == username && doc.data().email == email){
 
         validate = false;
        }
-      //  console.log("come to check")
+      
 
     });
 
