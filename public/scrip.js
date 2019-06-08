@@ -80,6 +80,7 @@ async function regis() {
   
   }).catch(function (error) {
     
+    alert("อีเมล์ของคุณมีผู้ใช้แล้ว")
     var errorCode = error.code;
     var errorMessage = error.message;
     console.log(error.code + ':' + error.message);
@@ -186,13 +187,10 @@ async function login() {
     });
   });
   if(validate == false){
-    handleLoginError()
+    alert("รหัสสำหรับเข้าสู่ระบบไม่ถูกต้อง")
   }
 };
 
-function handleLoginError(){
-
-}
 
 function checkLogin(email,password){
   firebase.auth().signInWithEmailAndPassword(email,password).then(function (data) {
@@ -222,7 +220,7 @@ function forgot(){
   .then(function() {
 	alert('กรุณาตรวจเช็ค Email ของคุณ สำหรับขอรหัสผ่านใหม่ !');
   }).catch(function (error) {
-    
+  alert('Email นี้ไม่มีอยู่ในระบบสมาชิก ไม่สามารถส่งรหัสผ่านใหม่ให้คุณได้ !');
   });
   
   
