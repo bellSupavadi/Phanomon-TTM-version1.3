@@ -315,9 +315,16 @@ async function getData() {
   
   let val1 =  await getAPI(solaryear,solarmonth,solarday)
   let val2 = 'null'
-  if(solarmonthPlus >= 0){
+
+  if(solarmonthPlus > 0){
    val2 =  await getAPI(solaryear,solarmonthPlus,solarday)
+  }else if(solaryear != 2400){
+    solarmonthPlus =(parseInt(solarmonth) + 12)-9
+    let solaryearPlus = solaryear-1
+    
+    val2 =  await getAPI(solaryearPlus,solarmonthPlus,solarday)
   }
+
   let val3 = profes
   let val4 = ag
   let val5 = add
@@ -433,6 +440,11 @@ let objectMoon = JSON.parse(objMoon)
             document.getElementById('show_moondate').innerHTML += datamoon;
             
           }
+          else if (objectMoon.moonmount == '8,8') {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
+          }
           else if (objectMoon.moonmount == 9) {
             datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'+'<br>'
             document.getElementById('show_moondate').innerHTML += datamoon;
@@ -502,6 +514,12 @@ let objectMoon = JSON.parse(objMoon)
             document.getElementById('show_moondate').innerHTML += datamoon;
             
           }
+          else if (objectMoon.moonmount == '8,8') {
+            datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : เตโชธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อพัทธะปิตตะ'+'<br>'+'อสุริญธัญญาณธาตุ : วิสมธาตุวาโย'+'<br>'
+            document.getElementById('show_moondate').innerHTML += datamoon;
+            
+          }
+          
           else if (objectMoon.moonmount == 9) {
             datamoon +='ธาตุประจำราศี : ลม'+'<br>'+ 'ธาตุแสดงผล : ปถวีธาตุหย่อน'+'<br>'+'พิกัดธาตุที่ระคน : อุทริยะ'+'<br>'+'อสุริญธัญญาณธาตุ : ลมธาตุวาโย'+'<br>'
             document.getElementById('show_moondate').innerHTML += datamoon;

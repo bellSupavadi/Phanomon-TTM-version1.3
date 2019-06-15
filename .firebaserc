@@ -1,5 +1,10 @@
 {
   "projects": {
+<<<<<<< HEAD
     "default": "phanomonttm-96907"
+=======
+    "default": "phanomonttm",
+    "y": "phanomonttm-96907"
+>>>>>>> edit last sent
   }
 }
